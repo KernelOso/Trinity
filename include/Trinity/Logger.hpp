@@ -39,9 +39,9 @@ namespace Trinity::Logger {
 
             // Configurar el disenio de los logs
             #ifdef NDEBUG
-                async_logger->set_pattern("[%^%L%$] :: %v");
+                async_logger->set_pattern("[%^%L] :: %v %$");
             #else
-                async_logger->set_pattern("[%^%L%$] { %@ (%!) } :: %v");
+                async_logger->set_pattern("[%^%L] { %@ (%!) } :: %v %$");
             #endif
 
             // Establecer el logger asincrono como el logger global por defecto

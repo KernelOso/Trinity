@@ -1,6 +1,6 @@
 # Trinity Game Engine
 
-![_README_ASSETS/screenshot.png]
+![[./_README_ASSETS/screenshot.png]]
 
 Solo un simple motor de videojuegos hecho desde 0 en C/C++.
 

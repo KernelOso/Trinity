@@ -51,16 +51,16 @@ namespace Trinity {
                     if (!SDL_SetWindowTitle(sdlWindow, title.c_str())) {
                         LOG_ERROR("Error al cambiar el titulo de la ventana SDL");
                     }
-                    LOG_INFO("Titulo de la ventana configurado en: {}" , title);
+                    LOG_DEBUG("Titulo de la ventana configurado en: {}" , title);
                     return *this;
                 }
 
                 Window& setSize(int width , int height) {
                     if (!sdlWindow) return *this;
                     if (!SDL_SetWindowSize(sdlWindow, width, height)) {
-                        LOG_ERROR("Error al cambiar el tamanio de la ventana SDL");
+                        LOG_ERROR("Error al cambiar el tama;o de la ventana SDL");
                     }
-                    LOG_INFO("Tamanio de la ventana configurado en: {} x {}" , width , height);
+                    LOG_DEBUG("Tama;o de la ventana configurado en: {} x {}" , width , height);
                     return *this;
                 }
 
@@ -69,7 +69,7 @@ namespace Trinity {
                     if (!SDL_SetWindowFullscreen(sdlWindow, isFullscreen)) {
                         LOG_ERROR("Error al cambiar el estado de la pantalla completa en la ventana SDL");
                     }
-                    LOG_INFO("Estado de la pantalla completa configurado en: {}" , isFullscreen);
+                    LOG_DEBUG("Estado de la pantalla completa configurado en: {}" , isFullscreen);
                     return *this;
                 }
 
@@ -78,7 +78,7 @@ namespace Trinity {
                     if (!SDL_SetWindowResizable(sdlWindow, isResizable)) {
                         LOG_ERROR("Error al cambiar el estado del modo \"resizable\" en la ventana SDL");
                     }
-                    LOG_INFO("Estado \"resizable\" de la ventana configurado en: {}" , isResizable);
+                    LOG_DEBUG("Estado \"resizable\" de la ventana configurado en: {}" , isResizable);
                     return *this;
                 }
 
@@ -92,7 +92,7 @@ namespace Trinity {
                     if (!SDL_GL_SetSwapInterval(vsyncMode)) {
                         LOG_ERROR("Error al cambiar el modo V-Sync en la ventana SDL");
                     }
-                    LOG_INFO("Modo V-Sync configurado en: {}" , vsyncMode);
+                    LOG_DEBUG("Modo V-Sync configurado en: {}" , vsyncMode);
                     return *this;
                 }
 
@@ -151,7 +151,7 @@ namespace Trinity {
         // ▙▘▙▖▄▌▐▖▌ ▙▌▙▖▐▖▙▌▌
         // ✶ ────────────── ✶
         void destroy() {
-            LOG_INFO("Destruyendo la ventana SDL...");
+            LOG_WARN("Destruyendo la ventana SDL...");
 
             if (openGlContext) { SDL_GL_DestroyContext(openGlContext); openGlContext = nullptr; }
             if (sdlWindow) {SDL_DestroyWindow(sdlWindow); sdlWindow = nullptr; }
@@ -249,7 +249,7 @@ namespace Trinity {
         // ▌ ▐▖█▌▙▌  ▙▌▙▖  ▚▘▙▖▌ ▌▐ ▌▙▖█▌▙▖▌▙▌▌▌
         //       ▄▌
         // ✶ ────────────── ✶
-        LOG_INFO("Ventana inicializada correctamente!");
+        LOG_INFO("Ventana  SDL inicializada correctamente!");
         windowContext.isValid = true;
         return windowContext;
     }
