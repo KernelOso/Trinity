@@ -19,7 +19,11 @@
     #include "Trinity/Window.hpp"
     #include "Trinity/Logger.hpp"
 // ✦ . ──────────────────────────────── .✦
+// Resource Managers
+    #include "Trinity/ResourceManagers/MeshManager.hpp"
+// ✦ . ──────────────────────────────── .✦
 // ECS
+    #include "Trinity/Components/MeshComponent.hpp"
 
 /*
  *  Nota importante:
@@ -56,23 +60,22 @@ int main() {
     // Contexto interno del motor
     // Evita que todo se vaya a la mierda al momento de terminar la ejecucion
     // Obliga a que los objetos se destruyan correctamente
+
+    // ✦ . ──────────────────────────────── .✦
+    // ▄▖      ▗     ▘    ▖▖    ▗
+    // ▌ ▛▌▛▌▛▘▜▘▛▘▌▌▌▛▘  ▌▌█▌▛▌▜▘▀▌▛▌▀▌
+    // ▙▖▙▌▌▌▄▌▐▖▌ ▙▌▌▌   ▚▘▙▖▌▌▐▖█▌▌▌█▌
+    // ✶ ────────────── ✶
+
+    // Crear la ventana inicial
+    Trinity::Window window = Trinity::initOpenGlWindow( 4 , 6 );
+
+    // Configurar la ventana
+    window  .setTitle( "Trinity DEV" )
+            .setSize( 1280 , 720 )
+            .setResizable( false )
+            .setVsync( 1 );
     {
-
-        // ✦ . ──────────────────────────────── .✦
-        // ▄▖      ▗     ▘    ▖▖    ▗
-        // ▌ ▛▌▛▌▛▘▜▘▛▘▌▌▌▛▘  ▌▌█▌▛▌▜▘▀▌▛▌▀▌
-        // ▙▖▙▌▌▌▄▌▐▖▌ ▙▌▌▌   ▚▘▙▖▌▌▐▖█▌▌▌█▌
-        // ✶ ────────────── ✶
-
-        // Crear la ventana inicial
-        Trinity::Window window = Trinity::initOpenGlWindow( 4 , 6 );
-
-        // Configurar la ventana
-        window  .setTitle( "Trinity DEV" )
-                .setSize( 1280 , 720 )
-                .setResizable( false )
-                .setVsync( 1 )
-        ;
 
         // ✦ . ──────────────────────────────── .✦
         // ▄▖    ▐▘▘          ▘      ▄▖   ▄▖  ▘
@@ -81,7 +84,7 @@ int main() {
         //          ▄▌
         // ✶ ────────────── ✶
 
-        LOG_INFO("Inicializando ImGui...");
+        LOG_DEBUG("(Main::ImGui) Inicializando ImGui...");
 
         // Inicializar ImGui
         ImGui::CreateContext();
@@ -95,16 +98,28 @@ int main() {
         ImGui_ImplSDL3_InitForOpenGL(window.sdlWindow, window.openGlContext);
         ImGui_ImplOpenGL3_Init("#version 460");
 
+        LOG_INFO("(Main::ImGui) Contexto global de ImGui inicializado");
+
         // ✦ . ──────────────────────────────── .✦
         // ▄▖▜
         // ▙▖▐ █▌▛▘▛▘
         // ▌ ▐▖▙▖▙▖▄▌
         // ✶ ────────────── ✶
 
+        LOG_DEBUG("(Main::Flecs) Inicializando entorno de ejecucion Flecs...");
+
         // Inicializar flecs
         flecs::world flecsWorld;
 
-        // Logica flecs...
+        flecsWorld.emplace<Trinity::ResourceManagers::MeshManager>();
+
+        auto& meshManager = flecsWorld.get_mut<Trinity::ResourceManagers::MeshManager>();
+
+        auto testCube = flecsWorld.entity()
+            .set<Trinity::Components::MeshComponent>({  meshManager.Get("base/meshes/cube.obj") })
+        ;
+
+        LOG_INFO("(Main::Flecs) Entorno de ejecucion Flecs cargado.");
 
         // ✦ . ──────────────────────────────── .✦
         // ▄   ▜ ▗     ▄▖▘
@@ -224,17 +239,20 @@ int main() {
         // ▙▖▌▌▌▌▙▌▌▙▖▙▖█▌  ▌ ▌▌▌█▌▐▖
         //       ▌
         // ✶ ────────────── ✶
+        LOG_INFO("✦ . ──────────────────────────────────────────────────────────────── .✦");
+        LOG_INFO("(Main::ExecEnd) Terminando la ejecucion de forma ordenada...");
 
-        LOG_INFO("Apagando ImGui...");
-
+        LOG_DEBUG("(Main::ExecEnd::ImGui) Limpiando contexto global ImGui");
         // Limpiar ImGui
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL3_Shutdown();
         ImGui::DestroyContext();
+        LOG_INFO("(Main::ExecEnd::ImGui) Se limpio correctamente el contexto global ImGui.");
 
-        // Destruir la ventana SDL
-        window.destroy();
     }
+
+    // Destruir la ventana SDL
+    window.destroy();
 
     // Limpia por completo la ejecucion de SDL
     SDL_Quit();
