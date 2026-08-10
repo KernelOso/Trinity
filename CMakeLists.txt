@@ -208,17 +208,6 @@
         "${CMAKE_PROJECT_NAME}" 
         
         "${MY_SOURCES}"
-            include/Trinity/Window.hpp
-            libs/stb/stb_image.h
-            libs/stb/stb_image.cpp
-            include/Trinity/ResourceManager.hpp
-            include/Trinity/Components/MeshComponent.hpp
-            include/Trinity/ResourceLoaders/MeshLoader.hpp
-            include/Trinity/Components/PositionComponent.hpp
-            include/Trinity/Components/TextureComponent.h
-            include/Trinity/ResourceLoaders/TextureLoader.hpp
-            include/Trinity/ResourceManagers/MeshManager.hpp
-            include/Trinity/Logger.hpp
     )
 
 # ✶ ──

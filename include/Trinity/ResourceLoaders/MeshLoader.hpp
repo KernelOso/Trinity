@@ -33,7 +33,7 @@ namespace Trinity::ResourceLoaders {
 
     inline std::shared_ptr<Trinity::Components::MeshResource> meshLoader (const std::string& meshFilePath) {
 
-        LOG_DEBUG("Cargando la Mesh: \"{}\"...", meshFilePath);
+        LOG_DEBUG("(Trinity::ResourceLoaders::meshLoader) Cargando la Mesh: \"{}\"...", meshFilePath);
 
         // ✦ . ──────────────────────────────── .✦
         // ▄▖               ▌  ▗       ▄▖▄▖▄▖▄▖▖  ▖▄▖
@@ -60,7 +60,8 @@ namespace Trinity::ResourceLoaders {
 
         // Verifica la integridad del archivo cargado
         if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mNumMeshes == 0) {
-            LOG_ERROR( "Error al cargar la Mesh : \"{}\" | Excepcion: {}", meshFilePath, importer.GetErrorString() );
+
+            LOG_ERROR( "(Trinity::ResourceLoaders::meshLoader) Error al cargar la Mesh: \"{}\" | Excepcion: {}", meshFilePath, importer.GetErrorString() );
 
             // En caso de error...
             // Cargar modelo placeholder de error
@@ -128,7 +129,7 @@ namespace Trinity::ResourceLoaders {
                 20, 23, 21
             };
 
-            LOG_WARN("Fallo al cargar la Mesh: \"{}\", utilizando Mesh Placeholder" , meshFilePath);
+            LOG_WARN("(Trinity::ResourceLoaders::meshLoader) Falla al cargar la Mesh: \"{}\", utilizando Mesh Fallback." , meshFilePath);
 
         }
         else {
@@ -170,8 +171,6 @@ namespace Trinity::ResourceLoaders {
                 for (unsigned j = 0; j < face.mNumIndices; ++j)
                     indices.push_back(face.mIndices[j]);
             }
-
-            LOG_DEBUG("Mesh : \"{}\" cargada correctamente con: {} vertices! ", meshFilePath , indices.size());
 
         }
 
@@ -253,6 +252,8 @@ namespace Trinity::ResourceLoaders {
 
         // Cargar la cantidad de indices en el EBO
         meshResource->indexCount = static_cast<GLsizei>(indices.size());
+
+        LOG_INFO("(Trinity::ResourceLoaders::meshLoader) Mesh: \"{}\" cargada. | # de vertices: {}  ", meshFilePath , indices.size());
 
         return meshResource;
     }

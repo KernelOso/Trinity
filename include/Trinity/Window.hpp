@@ -49,36 +49,36 @@ namespace Trinity {
                 Window& setTitle(std::string title) {
                     if (!sdlWindow) return *this;
                     if (!SDL_SetWindowTitle(sdlWindow, title.c_str())) {
-                        LOG_ERROR("Error al cambiar el titulo de la ventana SDL");
+                        LOG_ERROR("(Trinity::Window::Setters) Error al cambiar el valor de SDL_WindowTitle");
                     }
-                    LOG_DEBUG("Titulo de la ventana configurado en: {}" , title);
+                    LOG_DEBUG("(Trinity::Window::Setters) SDL_WindowTitle seteado a: {}" , title);
                     return *this;
                 }
 
                 Window& setSize(int width , int height) {
                     if (!sdlWindow) return *this;
                     if (!SDL_SetWindowSize(sdlWindow, width, height)) {
-                        LOG_ERROR("Error al cambiar el tama;o de la ventana SDL");
+                        LOG_ERROR("(Trinity::Window::Setters) Error al cambiar el valor de SDL_WindowSize");
                     }
-                    LOG_DEBUG("Tama;o de la ventana configurado en: {} x {}" , width , height);
+                    LOG_DEBUG("(Trinity::Window::Setters) SDL_WindowSize seteado a: {} x {}" , width , height);
                     return *this;
                 }
 
                 Window& setFullscreen(bool isFullscreen) {
                     if (!sdlWindow) return *this;
                     if (!SDL_SetWindowFullscreen(sdlWindow, isFullscreen)) {
-                        LOG_ERROR("Error al cambiar el estado de la pantalla completa en la ventana SDL");
+                        LOG_ERROR("(Trinity::Window::Setters) Error al cambiar el valor de SDL_WindowFullscreen");
                     }
-                    LOG_DEBUG("Estado de la pantalla completa configurado en: {}" , isFullscreen);
+                    LOG_DEBUG("(Trinity::Window::Setters) SDL_WindowFullscreen seteado a: {}" , isFullscreen);
                     return *this;
                 }
 
                 Window& setResizable(bool isResizable) {
                     if (!sdlWindow) return *this;
                     if (!SDL_SetWindowResizable(sdlWindow, isResizable)) {
-                        LOG_ERROR("Error al cambiar el estado del modo \"resizable\" en la ventana SDL");
+                        LOG_ERROR("(Trinity::Window::Setters) Error al cambiar el valor de SDL_WindowResizable");
                     }
-                    LOG_DEBUG("Estado \"resizable\" de la ventana configurado en: {}" , isResizable);
+                    LOG_DEBUG("(Trinity::Window::Setters) SDL_WindowResizable seteado a: {}" , isResizable);
                     return *this;
                 }
 
@@ -90,9 +90,9 @@ namespace Trinity {
                      */
                     if (!openGlContext) return *this; // guard mínimo
                     if (!SDL_GL_SetSwapInterval(vsyncMode)) {
-                        LOG_ERROR("Error al cambiar el modo V-Sync en la ventana SDL");
+                        LOG_ERROR("(Trinity::Window::Setters) Error al cambiar el valor de SDL_GL_SwapInterval");
                     }
-                    LOG_DEBUG("Modo V-Sync configurado en: {}" , vsyncMode);
+                    LOG_DEBUG("(Trinity::Window::Setters) SDL_GL_SwapInterval seteado a: {}" , vsyncMode);
                     return *this;
                 }
 
@@ -151,10 +151,21 @@ namespace Trinity {
         // ▙▘▙▖▄▌▐▖▌ ▙▌▙▖▐▖▙▌▌
         // ✶ ────────────── ✶
         void destroy() {
-            LOG_WARN("Destruyendo la ventana SDL...");
 
-            if (openGlContext) { SDL_GL_DestroyContext(openGlContext); openGlContext = nullptr; }
-            if (sdlWindow) {SDL_DestroyWindow(sdlWindow); sdlWindow = nullptr; }
+            // LOG_DEBUG("(Trinity::Window::Destructor) Destruyendo contextos de la ventana SDL...");
+
+            if (openGlContext) {
+                SDL_GL_DestroyContext(openGlContext);
+                openGlContext = nullptr;
+                // LOG_DEBUG("(Trinity::Window::Destructor) Se destruyo el contexto OpenGl de la ventana");
+            }
+            if (sdlWindow) {
+                SDL_DestroyWindow(sdlWindow);
+                sdlWindow = nullptr;
+                // LOG_DEBUG("(Trinity::Window::Destructor) Se destruyo el contexto SDL de la ventana");
+            }
+
+            // LOG_INFO("(struct::Window::Destructor) Se destruyeron correctamente los contextos de la ventana SDL.");
         }
 
     };
@@ -166,7 +177,7 @@ namespace Trinity {
     // ✶ ────────────── ✶
     inline Window initOpenGlWindow( int openGlMajorVersion , int openGlMinorVersion ) {
 
-        LOG_INFO("Inicializando la ventana SDL...");
+        LOG_DEBUG("(Trinity::Window::initOpenGlWindow) Inicializando la ventana SDL...");
 
         // Crear el objeto de la ventana
         Window windowContext;
@@ -182,7 +193,7 @@ namespace Trinity {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, openGlMajorVersion );
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, openGlMinorVersion );
 
-        LOG_DEBUG("Version de OpenGL configurada en: {}.{}" , openGlMajorVersion , openGlMinorVersion);
+        LOG_DEBUG("(Trinity::Window::initOpenGlWindow) Version de OpenGL configurada en: {}.{}" , openGlMajorVersion , openGlMinorVersion);
 
         // Define que se va a utilizar el perfil de desarrollo "core" de OpenGL
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -197,7 +208,7 @@ namespace Trinity {
         // Inicializa el componente de Video SDL
         if (!SDL_Init(SDL_INIT_VIDEO))
         {
-            LOG_ERROR("Error al inicializar el componente de video SDL :: {}" , SDL_GetError());
+            LOG_ERROR("(Trinity::Window::initOpenGlWindow) Error al inicializar el componente de video SDL | Excepcion: {}" , SDL_GetError());
             return windowContext;
         }
 
@@ -215,7 +226,7 @@ namespace Trinity {
             // En caso de error creando la ventana:
             if (!windowContext.sdlWindow)
             {
-                LOG_ERROR("Error al crear la ventana SDL :: {}" , SDL_GetError());
+                LOG_ERROR("(Trinity::Window::initOpenGlWindow) Error al crear la ventana SDL | Excepcion: {}" , SDL_GetError());
                 return windowContext;
             }
 
@@ -232,14 +243,14 @@ namespace Trinity {
             // En caso de error creando el contexto:
             if (!windowContext.openGlContext)
             {
-                LOG_ERROR("Error al crear el contexto OpenGL");
+                LOG_ERROR("(Trinity::Window::initOpenGlWindow) Error al crear el contexto OpenGL");
                 return windowContext;
             }
 
         // Cargar funciones OpenGL con glad
         if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
         {
-            LOG_ERROR("Error al cargar las funciones OpenGL con GLAD");
+            LOG_ERROR("(Trinity::Window::initOpenGlWindow) Error al cargar las funciones OpenGL con GLAD");
             return windowContext;
         }
 
@@ -249,8 +260,9 @@ namespace Trinity {
         // ▌ ▐▖█▌▙▌  ▙▌▙▖  ▚▘▙▖▌ ▌▐ ▌▙▖█▌▙▖▌▙▌▌▌
         //       ▄▌
         // ✶ ────────────── ✶
-        LOG_INFO("Ventana  SDL inicializada correctamente!");
+        LOG_INFO("(Trinity::Window::initOpenGlWindow) Ventana y contextos de ventana SDL inicializados.");
         windowContext.isValid = true;
         return windowContext;
+
     }
 }

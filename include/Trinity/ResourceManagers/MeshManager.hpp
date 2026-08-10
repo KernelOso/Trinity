@@ -11,5 +11,5 @@ namespace Trinity::ResourceManagers {
     struct MeshManager : ResourceManager<Components::MeshResource> {
         MeshManager() : ResourceManager(ResourceLoaders::meshLoader) {}
     };
-
+    
 }
