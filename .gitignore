@@ -1,6 +1,7 @@
 .idea/
 .vscode/
-cmake/
 bin/
 imgui.ini
+build-debug/
+build-release/
 

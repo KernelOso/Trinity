@@ -25,11 +25,11 @@
 #
 #       Cmake Project Folder:
 #
-#           cmake -S . -B cmake/build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
+#           cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
 #   
 #       Compile Project:
 #
-#           cmake --build cmake/build-release --parallel $(nproc)
+#           cmake --build build-release --parallel $(nproc)
 #
 #       Run Project:
 #
@@ -39,11 +39,11 @@
 #
 #       Cmake Project Folder:
 #
-#           cmake -S . -B cmake/build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug 
+#           cmake -S . -B build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug
 #
 #       Compile Project:
 #
-#           cmake --build cmake/build-debug --parallel $(nproc)
+#           cmake --build build-debug --parallel $(nproc)
 #
 #       Run Project:
 #
@@ -174,7 +174,6 @@
 
 # ✶ ──
 
-
 # ✦ ──────
 # ██████ ▄▄ ▄▄ ▄▄▄▄▄  ▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄▄▄ ▄▄▄  ▄▄▄▄  ▄▄    ▄▄▄▄▄ 
 # ██▄▄   ▀█▄█▀ ██▄▄  ██▀▀▀ ██ ██   ██  ██▀██ ██▄██ ██    ██▄▄  
@@ -234,7 +233,16 @@
 
 # ✶ ──
 
+    # Agrega todos los archivos embebidos transformados a cabeceras C++
+    target_include_directories(
+            "${CMAKE_PROJECT_NAME}"
 
+            PUBLIC
+
+            "${CMAKE_CURRENT_SOURCE_DIR}/embedded/"
+    )
+
+# ✶ ──
 
 # ██     ▄▄ ▄▄▄▄  ▄▄▄▄   ▄▄▄  ▄▄▄▄  ▄▄ ▄▄▄▄▄  ▄▄▄▄ 
 # ██     ██ ██▄██ ██▄█▄ ██▀██ ██▄█▄ ██ ██▄▄  ███▄▄ 
